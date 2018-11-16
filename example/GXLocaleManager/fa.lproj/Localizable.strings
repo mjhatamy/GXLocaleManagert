@@ -1,0 +1,11 @@
+/* 
+  Localizable.strings
+  GXLocaleManager
+
+  Created by Majid Hatami Aghdam on 11/16/18.
+  Copyright © 2018 Majid Hatami Aghdam. All rights reserved.
+*/
+
+"Signup.WelcomeToMyGix" = "به MyGix خوش آمدید";
+
+"Common.PrivacyAndPolicy" = "PrivacyAndPolicy";

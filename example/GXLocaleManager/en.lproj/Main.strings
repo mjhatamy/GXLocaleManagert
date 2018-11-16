@@ -1,0 +1,15 @@
+
+/* Class = "UIButton"; normalTitle = "Change Lang"; ObjectID = "7Bu-1s-hFN"; */
+"7Bu-1s-hFN.normalTitle" = "Change Lang";
+
+/* Class = "UINavigationItem"; title = "Main"; ObjectID = "DQP-Vf-0GV"; */
+"DQP-Vf-0GV.title" = "Main";
+
+/* Class = "UILabel"; text = "Hello"; ObjectID = "SbW-XK-2wx"; */
+"SbW-XK-2wx.text" = "Hello";
+
+/* Class = "UIButton"; normalTitle = "Go to"; ObjectID = "Yzt-jC-N6P"; */
+"Yzt-jC-N6P.normalTitle" = "Go to";
+
+/* Class = "UILabel"; text = "Current language"; ObjectID = "zeT-6C-vcS"; */
+"zeT-6C-vcS.text" = "Current language";
