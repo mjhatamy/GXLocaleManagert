@@ -16,6 +16,55 @@ extension Notification.Name{
 }
 
 class GXLocaleManager: NSObject {
+    //let localeDirectoryName = "GXLanguagePath"
+    class func makeLocaleURL()-> URL?{
+        guard let fileUrl = URL.getGXFileURLFor("Localizable.strings", directory: "GXLanguagePath", false) else{
+            LOGE("Unable to make Language pack URL for path: Localizable")
+            return nil
+        }
+        return fileUrl
+    }
+    class func getLocaleUrl() -> URL?{
+        UserDefaults.standard.synchronize()
+        guard let path = UserDefaults.standard.string(forKey: "GXLanguagePath") else{
+            return nil
+        }
+        
+        guard let fileUrl = URL.getGXFileURLFor(path, directory: "GXLanguagePath", false) else{
+            LOGE("Unable to get Language pack URL for path:\(path)")
+            return nil
+        }
+        return fileUrl
+    }
+    
+    class func getLocalFileVersion() -> Double?{
+        let version = UserDefaults.standard.double(forKey: "GXLanguagePathVersion")
+        return version > 0 ? version : nil
+    }
+    
+    class func setLocaleFileUrl(_ fileURL:URL, _ version:Double){
+        UserDefaults.standard.set(fileURL.lastPathComponent, forKey: "GXLanguagePath")
+        UserDefaults.standard.set(fileURL.lastPathComponent, forKey: "GXLanguagePathVersion")
+        UserDefaults.standard.synchronize()
+    }
+    
+    class var languageCode:String {
+        get{
+            guard let res =  UserDefaults.standard.string(forKey: "GXLanguageCode")  else{
+                let currentLocale = Locale.current.languageCode ?? "en"
+                UserDefaults.standard.set(currentLocale, forKey: "GXLanguageCode")
+                UserDefaults.standard.synchronize()
+                NotificationCenter.default.post(name: NSNotification.Name.GXLocaleManager.defaultLocaleChanged, object: nil, userInfo: ["languageCode": self.languageCode])
+                return Locale.current.languageCode ?? "en"
+            }
+            return res
+        }
+        set{
+            UserDefaults.standard.set(newValue, forKey: "GXLanguageCode")
+            UserDefaults.standard.synchronize()
+            NotificationCenter.default.post(name: NSNotification.Name.GXLocaleManager.defaultLocaleChanged, object: nil, userInfo: ["languageCode": self.languageCode])
+        }
+    }
     
     /// This handler will be called after every change in language. You can change it to handle minor localization issues in user interface.
     @objc static var updateHandler: () -> Void = {
@@ -117,16 +166,17 @@ class GXLocaleManager: NSObject {
     @objc class func apply(locale: Locale?, animated: Bool = true) {
         let semantic: UISemanticContentAttribute
         if let locale = locale {
-            setLocale(identifiers: [locale.identifier])
-            semantic = locale.isRTL ? .forceRightToLeft : .forceLeftToRight
+            //setLocale(identifiers: [locale.identifier])
+            //semantic = locale.isRTL ? .forceRightToLeft : .forceLeftToRight
         } else {
-            removeLocale()
-            semantic = Locale.baseLocale.isRTL ? .forceRightToLeft : .forceLeftToRight
+           // removeLocale()
+            //semantic = Locale.baseLocale.isRTL ? .forceRightToLeft : .forceLeftToRight
         }
         Locale.cachePreffered = nil
-        UIView.appearance().semanticContentAttribute = semantic
-        UITableView.appearance().semanticContentAttribute = semantic
-        UISwitch.appearance().semanticContentAttribute = semantic
+        //UIView.appearance().semanticContentAttribute = semantic
+        //UITableView.appearance().semanticContentAttribute = semantic
+        //UITableViewCell.appearance().semanticContentAttribute = semantic
+        //UISwitch.appearance().semanticContentAttribute = semantic
         
         //reloadWindows(animated: animated)
         NotificationCenter.default.post(name: NSNotification.Name.GXLocaleManager.defaultLocaleChanged, object: nil, userInfo: ["Locale": locale ?? Locale.current])
@@ -138,9 +188,13 @@ class GXLocaleManager: NSObject {
      
      - Parameter identifier: Locale identifier to be applied, e.g. `en` or `fa_IR`. `nil` value will change locale to system-wide.
      */
-    @objc class func apply(identifier: String?, animated: Bool = true) {
+    @objc class func apply(identifier: String?, animated: Bool = true, fileUrl:URL, version:Double) {
         let locale = identifier.map(Locale.init(identifier:))
-        apply(locale: locale, animated: animated)
+        //setLocale(identifiers: [identifier ?? "en"])
+        setLocaleFileUrl(fileUrl, version)
+        
+        GXLocaleManager.languageCode = identifier ?? "en"
+        //apply(locale: locale, animated: animated)
     }
     
     /**
@@ -148,14 +202,14 @@ class GXLocaleManager: NSObject {
      */
     @objc public class func setup() {
         // Allowing to update localized string on the fly.
-        Bundle.swizzleMethod(#selector(Bundle.localizedString(forKey:value:table:)),
-                             with: #selector(Bundle.mn_custom_localizedString(forKey:value:table:)))
+        //Bundle.swizzleMethod(#selector(Bundle.localizedString(forKey:value:table:)),
+                             //with: #selector(Bundle.mn_custom_localizedString(forKey:value:table:)))
         // Enforcing userInterfaceLayoutDirection based on selected locale. Fixes pop gesture in navigation controller.
-        UIApplication.swizzleMethod(#selector(getter: UIApplication.userInterfaceLayoutDirection),
-                                    with: #selector(getter: UIApplication.mn_custom_userInterfaceLayoutDirection))
+        //UIApplication.swizzleMethod(#selector(getter: UIApplication.userInterfaceLayoutDirection),
+                                    //with: #selector(getter: UIApplication.mn_custom_userInterfaceLayoutDirection))
         // Enforcing currect alignment for labels and texts which has `.natural` direction.
-        UILabel.swizzleMethod(#selector(UILabel.layoutSubviews), with: #selector(UILabel.mn_custom_layoutSubviews))
-        UITextField.swizzleMethod(#selector(UITextField.layoutSubviews), with: #selector(UITextField.mn_custom_layoutSubviews))
+        //UILabel.swizzleMethod(#selector(UILabel.layoutSubviews), with: #selector(UILabel.mn_custom_layoutSubviews))
+        //UITextField.swizzleMethod(#selector(UITextField.layoutSubviews), with: #selector(UITextField.mn_custom_layoutSubviews))
     }
 }
 

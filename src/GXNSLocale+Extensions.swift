@@ -22,4 +22,17 @@ extension NSLocale {
     @objc var isRTL: Bool {
         return (self as Locale).isRTL
     }
+    
+
+    fileprivate static func swizzle(selector: Selector, with replacement: Selector) {
+        let originalSelector = selector
+        let swizzledSelector = replacement
+        
+        if let swizzledMethod = class_getClassMethod(self, swizzledSelector), let originalMethod = class_getClassMethod(self, originalSelector) {
+            method_exchangeImplementations(originalMethod, swizzledMethod)
+        }
+    }
+    
+    
+    
 }

@@ -43,6 +43,6 @@ extension Locale {
      Checking the locale writing direction is right to left.
      */
     public var isRTL: Bool {
-        return Locale.characterDirection(forLanguage: self.languageCode!) == .rightToLeft
+        return Locale.characterDirection(forLanguage: Locale.current.languageCode ?? "en") == .rightToLeft
     }
 }
