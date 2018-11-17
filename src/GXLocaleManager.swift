@@ -37,6 +37,10 @@ class GXLocaleManager: NSObject {
         return fileUrl
     }
     
+    class var languagePackVersion:Double {
+        let m_version = UserDefaults.standard.double(forKey: "GXLanguagePathVersion")
+        return m_version
+    }
     class func getLocalFileVersion() -> Double?{
         let version = UserDefaults.standard.double(forKey: "GXLanguagePathVersion")
         return version > 0 ? version : nil
