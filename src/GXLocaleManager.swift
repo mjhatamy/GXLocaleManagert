@@ -168,14 +168,14 @@ class GXLocaleManager: NSObject {
      - Parameter identifier: Locale identifier to be applied, e.g. `en` or `fa_IR`. `nil` value will change locale to system-wide.
      */
     @objc class func apply(locale: Locale?, animated: Bool = true) {
-        let semantic: UISemanticContentAttribute
-        if let locale = locale {
+        //let semantic: UISemanticContentAttribute
+        //if let locale = locale {
             //setLocale(identifiers: [locale.identifier])
             //semantic = locale.isRTL ? .forceRightToLeft : .forceLeftToRight
-        } else {
+        //} else {
            // removeLocale()
             //semantic = Locale.baseLocale.isRTL ? .forceRightToLeft : .forceLeftToRight
-        }
+        //}
         Locale.cachePreffered = nil
         //UIView.appearance().semanticContentAttribute = semantic
         //UITableView.appearance().semanticContentAttribute = semantic
@@ -193,7 +193,7 @@ class GXLocaleManager: NSObject {
      - Parameter identifier: Locale identifier to be applied, e.g. `en` or `fa_IR`. `nil` value will change locale to system-wide.
      */
     @objc class func apply(identifier: String?, animated: Bool = true, fileUrl:URL, version:Double) {
-        let locale = identifier.map(Locale.init(identifier:))
+        //let locale = identifier.map(Locale.init(identifier:))
         //setLocale(identifiers: [identifier ?? "en"])
         setLocaleFileUrl(fileUrl, version)
         
