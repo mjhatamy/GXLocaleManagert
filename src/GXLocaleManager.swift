@@ -37,6 +37,26 @@ class GXLocaleManager: NSObject {
         return fileUrl
     }
     
+    class var isAppViewDirectionIsRightToLeft:Bool {
+        return UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft
+    }
+    
+    class var isRightToLeftLanguage: Bool{
+        let m_languaceCode = GXLocaleManager.languageCode
+        if m_languaceCode == "ar" || m_languaceCode == "fa" || m_languaceCode == "he" {
+            return true
+        }
+        return false
+    }
+    
+    class var isPersianBasedLanguage: Bool{
+        let m_languaceCode = GXLocaleManager.languageCode
+        if m_languaceCode == "ar" || m_languaceCode == "fa" {
+            return true
+        }
+        return false
+    }
+    
     class var languagePackVersion:Double {
         let m_version = UserDefaults.standard.double(forKey: "GXLanguagePathVersion")
         return m_version
@@ -59,7 +79,7 @@ class GXLocaleManager: NSObject {
                 UserDefaults.standard.set(currentLocale, forKey: "GXLanguageCode")
                 UserDefaults.standard.synchronize()
                 NotificationCenter.default.post(name: NSNotification.Name.GXLocaleManager.defaultLocaleChanged, object: nil, userInfo: ["languageCode": self.languageCode])
-                return Locale.current.languageCode ?? "en"
+                return currentLocale
             }
             return res
         }
