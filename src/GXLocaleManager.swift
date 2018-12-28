@@ -16,6 +16,34 @@ extension Notification.Name{
 }
 
 class GXLocaleManager: NSObject {
+    
+    public class func getSymbol(forCurrencyCode code: String) -> String? {
+        let locale = NSLocale(localeIdentifier: code)
+        if locale.displayName(forKey: .currencySymbol, value: code) == code {
+            let newlocale = NSLocale(localeIdentifier: code.dropLast() + "_en")
+            return newlocale.displayName(forKey: .currencySymbol, value: code)
+        }
+        return locale.displayName(forKey: .currencySymbol, value: code)
+    }
+    
+    /**
+     * Returns current time with UTC Offset.
+     * - parameter utcOffset: UTC Offset to get its time.
+     * - parameter locale: String value of Locale identifier to return time string in format of the specified locale. for example: EN or FR. Default value is current App locale.
+    */
+    public class func getTimeStringFromGMT(_ utcOffset:Double, _ locale:String = GXLocaleManager.languageCode) -> String?{
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        formatter.locale = Locale(identifier: locale)
+        guard let timeZone = TimeZone(secondsFromGMT: 0 ) else{
+            return nil
+        }
+        formatter.timeZone = timeZone
+        let date = Date(timeIntervalSince1970: Date().timeIntervalSince1970 + (  utcOffset   * 60 * 60) )
+        return formatter.string(from: date)
+    }
+    
+    
     //let localeDirectoryName = "GXLanguagePath"
     class func makeLocaleURL()-> URL?{
         guard let fileUrl = URL.getGXFileURLFor("Localizable.strings", directory: "GXLanguagePath", false) else{
