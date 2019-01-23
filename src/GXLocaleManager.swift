@@ -65,9 +65,9 @@ class GXLocaleManager: NSObject {
         return fileUrl
     }
     
-    class var isAppViewDirectionIsRightToLeft:Bool {
-        return UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft
-    }
+    //class var isAppViewDirectionIsRightToLeft:Bool {
+    //    return UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft
+    //}
     
     class var isRightToLeftLanguage: Bool{
         let m_languaceCode = GXLocaleManager.languageCode
@@ -167,6 +167,7 @@ class GXLocaleManager: NSObject {
      - Important: Either rootViewController must be set or storyboardIdentifier of root viewcontroller
      in Main.storyboard must set to a string.
      */
+    /*
     internal class func reloadWindows(animated: Bool = true) {
         let windows = UIApplication.shared.windows
         for window in windows {
@@ -186,7 +187,7 @@ class GXLocaleManager: NSObject {
             }
         }
     }
-    
+    */
     
     /**
      Overrides system-wide locale in application setting.
