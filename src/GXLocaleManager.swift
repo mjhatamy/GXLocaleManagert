@@ -318,3 +318,86 @@ internal extension NSObject {
         return false
     }
 }
+
+let PersianNumbers:[String:String] = [
+    "0":"\u{0660}",//"۰",
+    "1":"\u{0661}",//"۱",
+    "2":"\u{0662}",//"۲",
+    "3":"\u{0663}",//"۳",
+    "4":"\u{0664}",//"۴",
+    "5":"\u{0665}",//"۵",
+    "6":"\u{0666}",//"۶",
+    "7":"\u{0667}",//"۷",
+    "8":"\u{0668}",//"۸",
+    "9":"\u{0669}",//"۹",
+    //"%":"\u{066A}", //٪
+    //"*":"\u{066D}", //*
+    //"+":"\u{0200F}+",
+    //"$":"\u{0200E}$",
+    //".":"\u{0200E}."
+    ",":"،"
+]
+
+extension String{
+    var embedExplicitLTR:String{
+        return "\u{202A}" + self + "\u{202C}"
+    }
+    var localizeString:String {
+        var value:String = self
+        
+        ///Clean up string from "\u{200E}" and "\u{200F}"
+        value = value.replacingOccurrences(of: "\u{200E}", with: "")
+        value = value.replacingOccurrences(of: "\u{200F}", with: "")
+        
+        //var state:Int = 0
+        if GXLocaleManager.isPersianBasedLanguage{
+            for item in PersianNumbers {
+                value = value.replacingOccurrences(of: item.key, with: "\u{200E}"+item.value)
+            }
+        }
+        
+        return value
+        /*
+         for ch in value {
+         if (ch >= "\u{0600}" && ch <= "\u{065F}") || (ch >= "\u{066B}" && ch <= "\u{06EF}") || (ch >= "\u{06FA}" && ch <= "\u{077F}") {
+         //LOGD("Detected RTL CHAR \(ch)  \(ch.unicodeScalars.first)")
+         if state != 1 {
+         state = 1
+         newValue += "\u{202C}\u{200F}"
+         }
+         }
+         
+         ///Detect Numbers
+         else if  (ch >= "\u{0030}" && ch <= "\u{0039}") || (ch >= "\u{0660}" && ch <= "\u{0669}")
+         || (ch >= "\u{06F0}" && ch <= "\u{06F9}") || (ch == "\u{002B}" ) {
+         if state != 3 {
+         state = 3
+         newValue += "\u{202C}\u{202A}"
+         }
+         }
+         
+         else if (ch >= "\u{0041}" && ch <= "\u{004A}" /* ENGLISH CHARACTER uppercase*/ ) || (ch >= "\u{0061}" && ch <= "\u{007A}" /* ENGLISH CHARACTER lowercase*/ )
+         {//} || (ch >= "\u{0660}" && ch <= "\u{066A}") || (ch >= "\u{06F0}" && ch <= "\u{06FA}") /* Persian Numbers*/)  {  /// \u{0020} == white space
+         //LOGW("Detected LTR CHAR \(ch)  \(ch.unicodeScalars.first)")
+         if state != 2 {
+         state = 2
+         newValue += "\u{202C}\u{200E}"
+         }
+         
+         }else{ newValue += "\u{200E}"
+         }
+         newValue += String(ch)
+         }
+         return newValue
+         */
+    }
+    var toEnglishNumbers:String {
+        var value = self
+        for item in PersianNumbers {
+            value = value.replacingOccurrences(of: item.value, with: item.key)
+        }
+        return "\u{200E}" + value
+    }
+}
+
+
